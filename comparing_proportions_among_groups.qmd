@@ -1,6 +1,6 @@
 ---
 title: "Compare proportions among groups"
-author: "JSG"
+author: "maggie"
 format:
   html:
     embed-resources: true
@@ -252,16 +252,52 @@ http://statland.org/Software_Help/DataDesk/datafile.htm
 
 We want to again test if heart attacks occur equally across genders.
 
+```{r}
+table(heart_attacks$SEX)
+5065+7779
+binom.test(x=7779, n=12844)
+```
+
+p value is less than 0.05, reject null hypothesis that is equal across genders, males are more likely to have a heart attack.
+
 -   What if we know that males actually make up 50.8% of the population?
+
+```{r}
+#chisq test
+chisq.test(table(heart_attacks$SEX), p=c(0.508, 0.492))
+```
+p value is still less than 0.05, reject null hypothesis that it's equal. Males more likely for heart attack.
+
+
 
 #### 2
 
 Still using the heart attack data, is survival independent of gender?
 
+```{r}
+table(heart_attacks$SEX, heart_attacks$DIED)
+```
+
+```{r}
+chisq.test(table(heart_attacks$SEX), p=c(0.508, 0.492))
+chisq.test(table(heart_attacks$DIED))
+```
+Comparing the two, I think yes? The p value for both are lower than 0.05, so reject null hypothesis. 
+
 #### 3
 
 For people that have a heart attack before they turn 30, is survival
 independent of gender?
+
+```{r}
+table(heart_attacks$SEX, heart_attacks$AGE)
+```
+
+```{r}
+chisq.test(table(heart_attacks(heart_attacks$AGE < 30, "SEX")),
+           (heart_attacks(heart_attacks$AGE < 30, "DIED")))
+```
+I don't know what I did wrong here.
 
 ### Dolphins
 
@@ -286,6 +322,41 @@ Is travelling independent of time of day? You’ll need to consider
 traveling vs not traveling due to different number of groups observed in
 each period. Carry out post-hoc tests if needed.
 
+Took data from github directly, didn't update RStudio Project
+
+```{r}
+#calculating things other than traveling
+28+38
+4+5
+9
+56+10
+#calculating traveling and noth traveling.
+66+6
+9+6
+9+14
+66+13
+
+#finding the p thingy for dividing chisq.test
+72+15+23+79
+
+#finding the p thingy in chisq.test
+6/189
+6/189
+14/189
+13/189
+
+#nvm
+6+6+14+13
+6/39
+6/39
+14/39
+13/39
+
+chisq.test(x=c(6, 6, 14, 13), p=c(6/39, 6/39, 14/39, 13/39))
+chisq.test(x=c(66, 9, 9, 66), p=c(66/150, 9/150, 9/150, 66/150))
+```
+ I think I did it very wrong.
+
 ### Smoking
 
 #### 5
@@ -296,3 +367,5 @@ http://www.r-tutor.com/elementary-statistics/goodness-fit/chi-squared-test-indep
 
 to determine if smoking is independent of exercise. You’ll need to input
 data manually. Carry out post-hoc tests if needed.
+
+
